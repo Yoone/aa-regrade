@@ -5,6 +5,7 @@ import argparse
 import statistics
 
 from config import read_config, items
+from table import pp
 
 
 """
@@ -30,17 +31,20 @@ def craft_and_regrade(make, name, crafting_cost, min_grade, resplendent_for):
         costs.append(piece.total_cost)
         breaks.append(piece.breaks)
 
-    print('{} ({}) => mean cost: {}, mean break/item: {}, great successes: {}% ({})'.format(
+    return [
         name,
-        min_grade,
-        statistics.mean(costs),
-        statistics.mean(breaks),
-        great_successes / make * 100,
-        great_successes
-    ))
+        str(min_grade),
+        round(statistics.mean(costs), 2),
+        round(statistics.mean(breaks), 2),
+        '{:05.2f}% ({})'.format(
+            great_successes / make * 100,
+            great_successes,
+        ),
+    ]
 
 
 if __name__ == '__main__':
+    # Arg parser
     parser = argparse.ArgumentParser()
     parser.add_argument('-g', '--grades', required=True, help='configuration file for grades', dest='grades')
     parser.add_argument('-p', '--prices', required=True, help='configuration file for AH prices', dest='prices')
@@ -48,17 +52,23 @@ if __name__ == '__main__':
     parser.add_argument('-m', '--make', required=True, help='number of each item to make', dest='make')
     args = parser.parse_args()
 
+    # Loading config
     read_config(args.grades, args.prices, args.items)
 
+    # Importing grades after config has been loaded
     from grades import grades
 
-    print('Making {} of each item:'.format(args.make))
+    tab = [['Item Name', 'Grade', 'Mean Cost', 'Mean Break/Item', 'Great Successes']]
+
     for section_name in items.sections():
         s = items[section_name]
-        craft_and_regrade(
+        line = craft_and_regrade(
             make=int(args.make),
             name=s['name'],
             crafting_cost=int(s['crafting_cost']),
             min_grade=grades.get(s['min_grade']),
             resplendent_for=[grades.get(g) for g in s['resplendent_for'].split(',')],
         )
+        tab.append(line)
+
+    pp(tab)
