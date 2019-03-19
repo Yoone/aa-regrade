@@ -1,18 +1,20 @@
 aa-regrade
 ==========
 
-Simulate successive regrades to know how much gold it takes on average to regrade your item. You can customize grade chances, the use of charms (or not), AH prices and crafting costs for your items.
+This project is aimed at ArcheAge players who want to simulate gear regrades.
+
+It allows simulating successive regrades to know how much gold it takes on average to regrade an item. It is possible to customize grade chances, the use of charms (or not), AH prices and crafting costs for an item.
 
 Here is how it works if "I want to make 1000 Epic Obsidian Jerkins":
 
 * It will run through simulations until it has made 1000 Epic Obsidian Jerkins
-* For each downgrade or broken item throughout the process, it will count the crafting cost of your item towards the total price of making that one item and only add the item to the total count once it has reached Epic
+* For each downgrade or broken item throughout the process, it will count the crafting cost of the item towards the total price of making that one item and only add the item to the total count once it has reached Epic
 * It will then display the average results (cost, break/item, great success ratio when using resplendent)
 
 Setup & Requirements
 --------------------
 
-All your need is Python 3.
+All you need is Python 3.
 
 Usage
 -----
